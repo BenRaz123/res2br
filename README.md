@@ -12,7 +12,7 @@
 
 ### Status
 
-[x] Started
-[ ]  Create core function
-[ ]  Allow switching
-[ ]  Stable release
+- [x] Started
+- [ ]  Create core function
+- [ ]  Allow switching
+- [ ]  Stable release
