@@ -33,7 +33,7 @@ fn main() {
     let is_kbps = command.get_one::<bool>("useKbps").expect("Not Required");
 
     if !table.contains_key(resolution) {
-        print!("\"{resolution}\" Is an invalid resolution. Try Again!");
+        println!("\"{resolution}\" Is an invalid resolution. Try Again!");
         std::process::exit(1)
     }
 
