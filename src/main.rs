@@ -5,7 +5,7 @@ use std::collections::HashMap;
 #[command(name="res2br", author="Ben Raz <ben.raz2008@gmail.com>", about="Converts a resolution (like 1080p) to a bitrate (like 3.000) and optionally allows switching betwen MBPS (default) and KBPS", long_about=None)]
 struct Arguments {
     #[arg(help = "Accepts a resolution in ###p format")]
-    resolution: String,
+    resolution: Option<String>,
     #[arg(short = 'k', long = "use-kbps")]
     #[arg(action=ArgAction::SetTrue)]
     #[arg(help = "Switches to displaying bitrate in KBPS format")]
@@ -24,7 +24,22 @@ fn main() {
         ("180p".to_string(), 0.193),
     ]);
 
-    let resolution = &arguments.resolution;
+    let show_resolution = match &arguments.resolution {
+        Some(_) => false,
+        None => true,
+    };
+
+    if show_resolution {
+        println!("Possible resolutions:");
+        for (key, _) in &table {
+            print!("{key} ");
+        }
+        println!();
+        std::process::exit(0);
+    }
+
+    let resolution = &arguments.resolution.expect("Oops");
+    
     let is_kbps = match &arguments.use_kbps {
         Some(_) => true,
         None => false,
