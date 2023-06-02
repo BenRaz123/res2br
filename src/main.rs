@@ -1,7 +1,20 @@
 use clap::*;
 use std::collections::HashMap;
 
+#[derive(Parser, Debug)]
+#[command(name="res2br", author="Ben Raz <ben.raz2008@gmail.com>", about="Converts a resolution (like 1080p) to a bitrate (like 3.000) and optionally allows switching betwen MBPS (default) and KBPS", long_about=None)]
+struct Arguments {
+    #[arg(help = "Accepts a resolution in ###p format")]
+    resolution: String,
+    #[arg(short = 'k', long = "use-kbps")]
+    #[arg(action=ArgAction::SetTrue)]
+    #[arg(help = "Switches to displaying bitrate in KBPS format")]
+    use_kbps: Option<bool>,
+}
+
 fn main() {
+    let arguments = Arguments::parse();
+
     let table: HashMap<String, f32> = HashMap::from([
         ("1080p".to_string(), 3.000),
         ("720p".to_string(), 1.500),
@@ -11,26 +24,11 @@ fn main() {
         ("180p".to_string(), 0.193),
     ]);
 
-    let command = Command::new("res2br")
-        .version("0.5 BETA")
-        .author("Ben R. <ben.raz2008@gmail.com")
-        .about("Converts a resolution (like 1080p) into a bitrate (like 3.000) and optionally allows switching between Mbps (default) and Kbps")
-        .arg(
-            Arg::new("resolution")
-            .short('r').long("resolution")
-            .help("Accepts a resolution in (##p) format")
-            .required(true)
-        )
-        .arg(
-            Arg::new("useKbps")
-            .short('k').long("usekbps")
-            .help("Stwitches from displaying bitrate in Mbps to Kbps").required(false).action(ArgAction::SetTrue)
-        )
-        .get_matches();
-
-    let resolution = command.get_one::<String>("resolution").expect("Required");
-
-    let is_kbps = command.get_one::<bool>("useKbps").expect("Not Required");
+    let resolution = &arguments.resolution;
+    let is_kbps = match &arguments.use_kbps {
+        Some(_) => true,
+        None => false,
+    };
 
     if !table.contains_key(resolution) {
         println!("\"{resolution}\" Is an invalid resolution. Try Again!");

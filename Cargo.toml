@@ -1,6 +1,6 @@
 [package]
 name = "res2br"
-version = "1.0.1"
+version = "1.2.1"
 edition = "2021"
 authors = ["Ben Raz <ben.raz2008@gmail.com>"]
 license = "AGPL-3.0-or-later"
@@ -14,4 +14,4 @@ categories = ["command-line-utilities"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = "4.2.1"
+clap = { version = "4.2.1", features = ["derive"] }
