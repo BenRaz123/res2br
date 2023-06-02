@@ -6,9 +6,10 @@
 
 ### Installation
 
-- For mac users using an intel chip, simply clone the repo and add the symlink `macOSIntel` to your `usr/local/bin` directory. 
-- For linux users, clone and copy `linux` into `/usr/bin`. 
-- For Windows users, get WSL and continue at option 2.
+To install, run
+```shell
+% cargo install res2br
+```
 
 ### Status
 
