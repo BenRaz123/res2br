@@ -1,7 +1,15 @@
 [package]
 name = "res2br"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
+authors = ["Ben Raz <ben.raz2008@gmail.com>"]
+license = "agpl-3.0"
+description = "A tool to create LICENCEs"
+readme = "README.md"
+homepage = "https://github.com/benraz123/res2br"
+repository = "https://github.com/benraz123/res2br"
+keywords = ["cli", "image", "video"]
+categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
