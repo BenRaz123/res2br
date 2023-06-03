@@ -40,8 +40,8 @@ fn main() {
 
     let resolution = &arguments.resolution.expect("Oops");
     
-    let is_kbps = match &arguments.use_kbps {
-        Some(_) => true,
+    let is_kbps: bool = match &arguments.use_kbps {
+        Some(value) => *value,
         None => false,
     };
 
