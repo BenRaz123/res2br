@@ -28,10 +28,11 @@ fn get_config_path(argument: &Option<String>) -> String {
         return argument.clone().unwrap();
     }
     if std::env::var("RES2BR_CONFIG").is_ok() {
-        return std::env::var("RES2BR_CONFIG").unwrap();
+        if std::env::var("RES2BR_CONFIG").unwrap().len() > 2 {
+            return std::env::var("RES2BR_CONFIG").unwrap()
+        };
     }
-    std::env::set_var("RES2BR_CONFIG", "$HOME/.config/res2br/config.json");
-    "$HOME/.config/res2br/config.json".into()
+    format!("{}/.config/res2br/config.json", std::env::var("HOME").expect("Could not get value of $HOME variable!"))
 }
 
 fn get_config_from_path(path: &str) -> Result<Config, Box<dyn std::error::Error>> {
@@ -41,6 +42,7 @@ fn get_config_from_path(path: &str) -> Result<Config, Box<dyn std::error::Error>
 }
 
 fn main() {
+
     let arguments = Arguments::parse();
 
     let default_config: Config = Config {
@@ -89,7 +91,12 @@ fn main() {
         std::process::exit(1)
     }
 
-    if !config.use_kbps_by_default && !kbps_switched {
+    let is_kbps = match kbps_switched {
+        true => !config.use_kbps_by_default,
+        false => config.use_kbps_by_default
+    };
+
+    if !is_kbps {
         println!("{} Mbps", config.table[resolution]);
         std::process::exit(0);
     }
