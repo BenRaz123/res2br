@@ -23,16 +23,22 @@ struct Arguments {
     config_path: Option<String>
 }
 
-fn get_config_path(argument: &Option<String>) -> String {
-    if argument.is_some() {
-        return argument.clone().unwrap();
+fn get_config_path(argument: &Option<String>) -> Option<String> {
+    if let Some( path ) = argument {
+        return Some( path.to_owned() );
     }
-    if std::env::var("RES2BR_CONFIG").is_ok() {
-        if std::env::var("RES2BR_CONFIG").unwrap().len() > 2 {
-            return std::env::var("RES2BR_CONFIG").unwrap()
-        };
+
+    if let Ok( env_var ) = std::env::var("RES2BR_CONFIG") {
+        if env_var.len() > 2 {
+            return Some( env_var ); 
+        }
     }
-    format!("{}/.config/res2br/config.json", std::env::var("HOME").expect("Could not get value of $HOME variable!"))
+   
+    if let Ok( home ) = std::env::var("HOME") {
+        return Some( format!("{home}/.config/res2br/config.json") );
+    }
+    
+    None
 }
 
 fn get_config_from_path(path: &str) -> Result<Config, Box<dyn std::error::Error>> {
@@ -57,12 +63,12 @@ fn main() {
         use_kbps_by_default: false
     };
     
-    let config_path = get_config_path(&arguments.config_path);
-    let user_config = get_config_from_path(&config_path);
-
-    let config: Config = match user_config {
-        Ok(config) => config,
-        Err(_) => default_config
+    let config: Config = match get_config_path(&arguments.config_path) {
+        None => default_config,
+        Some(path) => match get_config_from_path(&path).ok() {
+            None => default_config,
+            Some(config) => config,
+        }
     };
 
     let show_resolution = match &arguments.resolution {
